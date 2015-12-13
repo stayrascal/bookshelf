@@ -25,4 +25,9 @@ public class BookServiceImpl implements BookService {
     public void saveBook(Book book) {
         repository.saveBook(book);
     }
+
+    @Override
+    public void delete(String isbn) {
+        repository.remove(isbn);
+    }
 }

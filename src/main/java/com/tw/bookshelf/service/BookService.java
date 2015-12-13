@@ -12,4 +12,6 @@ public interface BookService {
     Book getBookByIsbn(String isbn);
 
     void saveBook(Book book);
+
+    void delete(String isbn);
 }
