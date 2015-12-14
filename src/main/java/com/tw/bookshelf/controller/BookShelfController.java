@@ -19,9 +19,8 @@ public class BookShelfController {
 
     @RequestMapping(value = "/book/get", method = RequestMethod.GET)
     @ResponseBody
-    public String getAllBooks(){
-        Gson gson = new Gson();
-        return gson.toJson(bookService.findAll());
+    public Iterable getAllBooks(){
+        return bookService.findAll();
     }
 
     @RequestMapping(value = "/book/get/{isbn}", method = RequestMethod.GET)
