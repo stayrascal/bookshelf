@@ -1,16 +1,14 @@
 package com.tw.bookshelf.controller;
 
-import com.google.gson.Gson;
 import com.tw.bookshelf.entity.Book;
 import com.tw.bookshelf.entity.ResultEntity;
 import com.tw.bookshelf.service.BookService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 public class BookShelfController {
 
     private final Logger logger = LoggerFactory.getLogger(BookShelfController.class);
@@ -63,7 +61,7 @@ public class BookShelfController {
             resultEntity.setStatus(ResultEntity.Status.ERROR);
             resultEntity.setMessage("This book is exist");
         }else {
-            bookService.saveBook(book);
+            resultEntity.putParams("data", bookService.saveBook(book));
             resultEntity.setStatus(ResultEntity.Status.SUCCESS);
             resultEntity.setMessage("ok");
         }
@@ -75,7 +73,7 @@ public class BookShelfController {
     public ResultEntity update(@RequestBody Book book){
         ResultEntity resultEntity = new ResultEntity();
         if (bookService.getBookByIsbn(book.getIsbn()) != null){
-            bookService.saveBook(book);
+            resultEntity.putParams("data", bookService.saveBook(book));
             resultEntity.setStatus(ResultEntity.Status.SUCCESS);
             resultEntity.setMessage("ok");
         } else {

@@ -1,81 +1,195 @@
 package com.tw.bookshelf;
 
-import com.jayway.restassured.http.ContentType;
+import com.google.gson.Gson;
 import com.tw.bookshelf.entity.Book;
-import com.tw.bookshelf.entity.BookBuilder;
-import com.tw.bookshelf.service.BookService;
-import org.apache.http.HttpStatus;
+import com.tw.bookshelf.util.BookBuilder;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
-import static com.jayway.restassured.RestAssured.when;
-import static org.hamcrest.CoreMatchers.equalTo;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.core.Is.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = SpringBootWebApplication.class)
+@SpringApplicationConfiguration(classes = SpringBootWebApplication.class)
 @WebAppConfiguration
 public class BookShelfControllerTest {
+    private MockMvc mockMvc;
 
     @Autowired
-    BookService bookService;
+    private WebApplicationContext webApplicationContext;
+
+    @Before
+    public void setUp() {
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+    }
 
     @Test
-    public void shouldReturnDetailOfBookWhichIsbnIs9780201485677(){
+    public void ShouldReturnBookListWhenTestGetAllBooksMethod() throws Exception {
+        Book first = new BookBuilder()
+                .isbn("9780201485677")
+                .name("Refactoring")
+                .author("Martin Fowler")
+                .price(64.99).build();
+        Book second = new BookBuilder()
+                .isbn("9780132350884")
+                .name("Clean Code")
+                .author("Robert C. Martin")
+                .price(35.44).build();
+        Book third = new BookBuilder()
+                .isbn("9780131429017")
+                .name("The Art of UNIX Programming")
+                .author("Eric S. Raymond")
+                .price(39.99).build();
+        List<Book> books = Arrays.asList(first, second, third);
+        mockMvc.perform(get("/book/get"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(jsonPath("$", hasSize(3)))
+                /*.andExpect(jsonPath("$[0].isbn", is(third.getIsbn())))
+                .andExpect(jsonPath("$[0].name", is(third.getName())))
+                .andExpect(jsonPath("$[0].author", is(third.getAuthor())))
+                .andExpect(jsonPath("$[0].price", is(third.getPrice())))
+                .andExpect(jsonPath("$[1].isbn", is(first.getIsbn())))
+                .andExpect(jsonPath("$[1].name", is(first.getName())))
+                .andExpect(jsonPath("$[1].author", is(first.getAuthor())))
+                .andExpect(jsonPath("$[1].price", is(first.getPrice())))
+                .andExpect(jsonPath("$[2].isbn", is(second.getIsbn())))
+                .andExpect(jsonPath("$[2].name", is(second.getName())))
+                .andExpect(jsonPath("$[2].author", is(second.getAuthor())))
+                .andExpect(jsonPath("$[2s].price", is(second.getPrice())))*/;
+    }
+
+
+    @Test
+    public void shouldReturnDetailOfBookWhichIsbnIs9780201485677() throws Exception {
         Book expectBook = new BookBuilder()
                 .isbn("9780201485677")
                 .name("Refactoring")
                 .author("Martin Fowler")
                 .price(64.99).build();
-       when().get("/book/get/" + expectBook.getIsbn())
-               .then().statusCode(HttpStatus.SC_OK)
-               .and().contentType(ContentType.JSON)
-               .and().body("params.data.isbn", equalTo(expectBook.getIsbn()))
-               .and().body("params.data.author", equalTo(expectBook.getAuthor()))
-               //.and().body("params.data.price", equalTo(expectBook.getPrice().toString()))
-               .and().body("params.data.name", equalTo(expectBook.getName()));
+        mockMvc.perform(get("/book/get/{isbn}", expectBook.getIsbn()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(jsonPath("$.status", is(200)))
+                .andExpect(jsonPath("$.message", is("ok")))
+                .andExpect(jsonPath("$.params.data.isbn", is(expectBook.getIsbn())))
+                .andExpect(jsonPath("$.params.data.author", is(expectBook.getAuthor())))
+                .andExpect(jsonPath("$.params.data.price", is(expectBook.getPrice())))
+                .andExpect(jsonPath("$.params.data.name", is(expectBook.getName())));
     }
 
     @Test
-    public void theReturnStatusShouldBe200WhenDeleteBookSuccessfulAndTheMethodIsDelete(){
-        when().delete("/book/delete/9780201485677")
-                .then().statusCode(HttpStatus.SC_OK)
-                .and().contentType(ContentType.JSON)
-                .and().body("status", equalTo(200))
-                .and().body("message", equalTo("ok"));
+    public void theReturnStatusShoudBe500WhenBookIsNotExist() throws Exception {
+        mockMvc.perform(get("/book/get/3423532"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(jsonPath("$.status", is(500)))
+                .andExpect(jsonPath("$.message", is("This book is not exist")));
+    }
+
+
+    @Test
+    public void theReturnStatusShouldBe200WhenDeleteBookSuccessfulAndTheMethodIsDelete() throws Exception {
+
+        mockMvc.perform(delete("/book/delete/{isbn}", "9780201485677"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(jsonPath("$.status", is(200)))
+                .andExpect(jsonPath("$.message", is("ok")));
     }
 
     @Test
-    public void theReturnStatusShouldBe200WhenDeleteBookSuccessfulAndTheMethodIsGet(){
-        when().get("/book/delete/9780131429017")
-                .then().statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED);
+    public void theReturnStatusShouldBe200WhenDeleteBookSuccessfulAndTheMethodIsGet() throws Exception {
+
+        mockMvc.perform(get("/book/delete/{isbn}", "9780131429017"))
+                .andExpect(status().is4xxClientError())
+                .andExpect(status().is(405));
     }
 
     @Test
-    public void theReturnStatusShouldBe500WhenDeleteBookFaildAndTheMethodIsDelete(){
-        when().delete("/book/delete/97802014856778")
-                .then().statusCode(HttpStatus.SC_OK)
-                .and().contentType(ContentType.JSON)
-                .and().body("status", equalTo(500))
-                .and().body("message", equalTo("This book is not exist"));
+    public void theReturnStatusShouldBe500WhenDeleteBookFaildAndTheMethodIsDelete() throws Exception {
+
+        mockMvc.perform(delete("/book/delete/{isbn}", "97802014856778"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(jsonPath("$.status", is(500)))
+                .andExpect(jsonPath("$.message", is("This book is not exist")));
     }
 
-   /* @Test
-    public void theReturnStatusShouldBe200WhenAddBook(){
+    @Test
+    public void theReturnStatusShouldBe200WhenAddBook() throws Exception {
         Book book = new BookBuilder()
-                .isbn("97802014856775")
-                .name("Refactoring")
+                .isbn("9780201485456775")
+                .name("test")
                 .author("Martin Fowler")
                 .price(64.99).build();
-        when().post("/book/add", book)
-                .then().statusCode(HttpStatus.SC_OK)
-                .and().contentType(ContentType.JSON)
-                .and().body("status", equalTo(200))
-                .and().body("message", equalTo("ok"));
-    }*/
+        mockMvc.perform(post("/book/add").contentType("application/json;charset=UTF-8").content(new Gson().toJson(book)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(jsonPath("$.status", is(200)))
+                .andExpect(jsonPath("$.message", is("ok")))
+                .andExpect(jsonPath("$.params.data.isbn", is(book.getIsbn())));
+
+        mockMvc.perform(get("/book/get"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(jsonPath("$", hasSize(4)));
+
+        mockMvc.perform(post("/book/add").contentType("application/json;charset=UTF-8").content(new Gson().toJson(book)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(jsonPath("$.status", is(500)))
+                .andExpect(jsonPath("$.message", is("This book is exist")));
+
+        mockMvc.perform(get("/book/get"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(jsonPath("$", hasSize(4)));
+    }
+
+    @Test
+    public void theReturnStatusShouldBe500WhenUpdateBookButBookIsNotExist() throws Exception {
+        Book book = new BookBuilder()
+                .isbn("9780201485456775")
+                .name("test")
+                .author("Martin Fowler")
+                .price(64.99).build();
+
+        mockMvc.perform(post("/book/update").contentType("application/json;charset=UTF-8").content(new Gson().toJson(book)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status", is(500)))
+                .andExpect(jsonPath("$.message", is("This book is not exist")));
+    }
+
+    @Test
+    public void theReturnStatusShouldBe200WhenUpdateExistBook() throws Exception {
+        Book book = new BookBuilder()
+                .isbn("9780132350884")
+                .name("Clean Code")
+                .author("Robert C. Martin")
+                .price(35.44).build();
+
+        book.setPrice(55.5);
+
+        mockMvc.perform(post("/book/update").contentType("application/json;charset=UTF-8").content(new Gson().toJson(book)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status", is(200)))
+                .andExpect(jsonPath("$.message", is("ok")))
+                .andExpect(jsonPath("$.params.data.price", is(55.5)));
+    }
 
 
 }

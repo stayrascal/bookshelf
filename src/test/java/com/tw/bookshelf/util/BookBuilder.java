@@ -1,4 +1,6 @@
-package com.tw.bookshelf.entity;
+package com.tw.bookshelf.util;
+
+import com.tw.bookshelf.entity.Book;
 
 public class BookBuilder {
 

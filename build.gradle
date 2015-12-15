@@ -41,10 +41,8 @@ targetCompatibility = 1.8
 dependencies{
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-test'
-    compile 'org.springframework.boot:spring-boot-starter-hateoas'
     compile 'com.google.code.gson:gson'
     testCompile 'junit:junit'
-    testCompile 'com.jayway.restassured:rest-assured:2.7.0'
 
     testCompile 'org.mockito:mockito-core'
     testCompile 'com.jayway.jsonpath:json-path'
