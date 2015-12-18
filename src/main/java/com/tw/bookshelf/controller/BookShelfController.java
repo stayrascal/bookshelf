@@ -1,6 +1,5 @@
 package com.tw.bookshelf.controller;
 
-import com.google.gson.Gson;
 import com.tw.bookshelf.entity.Book;
 import com.tw.bookshelf.service.BookService;
 import org.slf4j.Logger;
@@ -12,8 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.Iterator;
 
 @Controller
 public class BookShelfController {
@@ -82,8 +79,8 @@ public class BookShelfController {
     }
 
     @RequestMapping(value = "/book/delete/{isbn}", method = RequestMethod.GET)
-    public ModelAndView delete(@PathVariable String isbn){
-        if (bookService.getBookByIsbn(isbn) == null){
+    public ModelAndView delete(@PathVariable String isbn) {
+        if (bookService.getBookByIsbn(isbn) == null) {
             return getErrorView("This book is not exist");
         }
         bookService.delete(isbn);
