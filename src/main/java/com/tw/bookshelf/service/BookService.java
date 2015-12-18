@@ -3,15 +3,15 @@ package com.tw.bookshelf.service;
 
 import com.tw.bookshelf.entity.Book;
 
-import java.util.Iterator;
-
 public interface BookService {
-    Iterable<Book> findAll();
 
+    Iterable<Book> findAll();
 
     Book getBookByIsbn(String isbn);
 
-    Book saveBook(Book book);
+    Book create(Book book);
 
-    void delete(String isbn);
+    Book save(Book book);
+
+    Book delete(String isbn);
 }

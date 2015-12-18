@@ -2,13 +2,15 @@ package com.tw.bookshelf.repository;
 
 
 import com.tw.bookshelf.entity.Book;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface BookRepository extends CrudRepository<Book, String> {
+import java.util.HashMap;
+import java.util.Map;
 
-    /*private static final Map<String, Book> BOOKS_MAP = new HashMap<String, Book>(){
+@Repository
+public class BookRepository {
+
+    private static final Map<String, Book> BOOKS_MAP = new HashMap<String, Book>() {
         {
             put("9780201485677", new Book("9780201485677", "Refactoring", "Martin Fowler", 64.99));
             put("9780132350884", new Book("9780132350884", "Clean Code", "Robert C. Martin", 35.44));
@@ -29,7 +31,7 @@ public interface BookRepository extends CrudRepository<Book, String> {
         return book;
     }
 
-    public void remove(String isbn) {
-        BOOKS_MAP.remove(isbn);
-    }*/
+    public void remove(Book book) {
+        BOOKS_MAP.remove(book);
+    }
 }

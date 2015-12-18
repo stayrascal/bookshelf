@@ -83,21 +83,18 @@ public class BookShelfControllerTest {
         mockMvc.perform(get("/book/get/{isbn}", expectBook.getIsbn()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$.status", is(200)))
-                .andExpect(jsonPath("$.message", is("ok")))
-                .andExpect(jsonPath("$.params.data.isbn", is(expectBook.getIsbn())))
-                .andExpect(jsonPath("$.params.data.author", is(expectBook.getAuthor())))
-                .andExpect(jsonPath("$.params.data.price", is(expectBook.getPrice())))
-                .andExpect(jsonPath("$.params.data.name", is(expectBook.getName())));
+                .andExpect(jsonPath("$.isbn", is(expectBook.getIsbn())))
+                .andExpect(jsonPath("$.author", is(expectBook.getAuthor())))
+                .andExpect(jsonPath("$.price", is(expectBook.getPrice())))
+                .andExpect(jsonPath("$.name", is(expectBook.getName())));
     }
 
     @Test
-    public void theReturnStatusShoudBe500WhenBookIsNotExist() throws Exception {
+    public void theReturnStatusShouldBe404WhenBookIsNotExist() throws Exception {
         mockMvc.perform(get("/book/get/3423532"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$.status", is(500)))
-                .andExpect(jsonPath("$.message", is("This book is not exist")));
+        .andExpect(status().is(404))
+        .andExpect(jsonPath("$.status", is("NOT_FOUND")))
+        .andExpect(jsonPath("$.error", is("Book Not Found")));
     }
 
 
@@ -107,12 +104,11 @@ public class BookShelfControllerTest {
         mockMvc.perform(delete("/book/delete/{isbn}", "9780201485677"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$.status", is(200)))
-                .andExpect(jsonPath("$.message", is("ok")));
+                .andExpect(jsonPath("$.isbn", is("9780201485677")));
     }
 
     @Test
-    public void theReturnStatusShouldBe200WhenDeleteBookSuccessfulAndTheMethodIsGet() throws Exception {
+    public void theReturnStatusShouldBe405WhenDeleteBookSuccessfulAndTheMethodIsGet() throws Exception {
 
         mockMvc.perform(get("/book/delete/{isbn}", "9780131429017"))
                 .andExpect(status().is4xxClientError())
@@ -120,35 +116,33 @@ public class BookShelfControllerTest {
     }
 
     @Test
-    public void theReturnStatusShouldBe500WhenDeleteBookFaildAndTheMethodIsDelete() throws Exception {
+    public void theReturnStatusShouldBe404WhenDeleteBookAndTheMethodIsDeleteButTheBookINotExist() throws Exception {
 
         mockMvc.perform(delete("/book/delete/{isbn}", "97802014856778"))
-                .andExpect(status().isOk())
+                .andExpect(status().is(404))
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$.status", is(500)))
-                .andExpect(jsonPath("$.message", is("This book is not exist")));
+                .andExpect(jsonPath("$.status", is("NOT_FOUND")))
+                .andExpect(jsonPath("$.error", is("Book Not Found")));
     }
 
     @Test
-    public void theReturnStatusShouldBe200WhenAddBook() throws Exception {
+    public void theReturnStatusShouldBe201WhenAddBookTheMethodIsPost() throws Exception {
         Book book = new BookBuilder()
                 .isbn("9780201485456775")
                 .name("test")
                 .author("Martin Fowler")
                 .price(64.99).build();
         mockMvc.perform(post("/book/add").contentType("application/json;charset=UTF-8").content(new Gson().toJson(book)))
-                .andExpect(status().isOk())
+                .andExpect(status().is(201))
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$.status", is(200)))
-                .andExpect(jsonPath("$.message", is("ok")))
-                .andExpect(jsonPath("$.params.data.isbn", is(book.getIsbn())));
+                .andExpect(jsonPath("$.isbn", is(book.getIsbn())));
 
         mockMvc.perform(get("/book/get"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$", hasSize(4)));
 
-        mockMvc.perform(post("/book/add").contentType("application/json;charset=UTF-8").content(new Gson().toJson(book)))
+        /*mockMvc.perform(post("/book/add").contentType("application/json;charset=UTF-8").content(new Gson().toJson(book)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.status", is(500)))
@@ -157,25 +151,40 @@ public class BookShelfControllerTest {
         mockMvc.perform(get("/book/get"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$", hasSize(4)));
+                .andExpect(jsonPath("$", hasSize(4)));*/
     }
 
     @Test
-    public void theReturnStatusShouldBe500WhenUpdateBookButBookIsNotExist() throws Exception {
+    public void theReturnStatusShouldBe404WhenUpdateBookButBookIsNotExist() throws Exception {
         Book book = new BookBuilder()
                 .isbn("9780201485456775")
                 .name("test")
                 .author("Martin Fowler")
                 .price(64.99).build();
 
-        mockMvc.perform(post("/book/update").contentType("application/json;charset=UTF-8").content(new Gson().toJson(book)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.status", is(500)))
-                .andExpect(jsonPath("$.message", is("This book is not exist")));
+        mockMvc.perform(put("/book/update").contentType("application/json;charset=UTF-8").content(new Gson().toJson(book)))
+                .andExpect(status().is(404))
+                .andExpect(jsonPath("$.status", is("NOT_FOUND")))
+                .andExpect(jsonPath("$.error", is("Book Not Found")));
     }
 
     @Test
-    public void theReturnStatusShouldBe200WhenUpdateExistBook() throws Exception {
+    public void theReturnStatusShouldBe200WhenUpdateExistBookAndTheMethodIsPut() throws Exception {
+        Book book = new BookBuilder()
+                .isbn("9780132350884")
+                .name("Clean Code")
+                .author("Robert C. Martin")
+                .price(35.44).build();
+
+        book.setPrice(55.5);
+
+        mockMvc.perform(put("/book/update").contentType("application/json;charset=UTF-8").content(new Gson().toJson(book)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.price", is(55.5)));
+    }
+
+    @Test
+    public void theReturnStatusShouldBe405WhenUpdateExistBookAndTheMethodIsPost() throws Exception {
         Book book = new BookBuilder()
                 .isbn("9780132350884")
                 .name("Clean Code")
@@ -185,10 +194,8 @@ public class BookShelfControllerTest {
         book.setPrice(55.5);
 
         mockMvc.perform(post("/book/update").contentType("application/json;charset=UTF-8").content(new Gson().toJson(book)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.status", is(200)))
-                .andExpect(jsonPath("$.message", is("ok")))
-                .andExpect(jsonPath("$.params.data.price", is(55.5)));
+                .andExpect(status().is4xxClientError())
+                .andExpect(status().is(405));
     }
 
 

@@ -1,12 +1,21 @@
 package com.tw.bookshelf.controller;
 
+import com.tw.bookshelf.core.exception.ResourceNotFoundException;
+import com.tw.bookshelf.core.util.MessageSourceAccessor;
 import com.tw.bookshelf.entity.Book;
-import com.tw.bookshelf.entity.ResultEntity;
 import com.tw.bookshelf.service.BookService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Locale;
+import java.util.Map;
 
 @RestController
 public class BookShelfController {
@@ -16,70 +25,46 @@ public class BookShelfController {
     private BookService bookService;
 
     @RequestMapping(value = "/book/get", method = RequestMethod.GET)
-    @ResponseBody
-    public Iterable getAllBooks(){
-        return bookService.findAll();
+    public ResponseEntity<Iterable> getAllBooks() {
+        return ResponseEntity.ok(bookService.findAll());
     }
 
     @RequestMapping(value = "/book/get/{isbn}", method = RequestMethod.GET)
-    @ResponseBody
-    public ResultEntity getBookByIsbn(@PathVariable String isbn){
-        ResultEntity resultEntity = new ResultEntity();
-        Book book = bookService.getBookByIsbn(isbn);
-        if (book != null){
-            resultEntity.setStatus(ResultEntity.Status.SUCCESS);
-            resultEntity.setMessage("ok");
-            resultEntity.putParams("data", book);
-        } else {
-            resultEntity.setStatus(ResultEntity.Status.ERROR);
-            resultEntity.setMessage("This book is not exist");
-        }
-        return resultEntity;
+    public ResponseEntity<Book> getBookByIsbn(@PathVariable String isbn) {
+        return ResponseEntity.ok(bookService.getBookByIsbn(isbn));
     }
 
     @RequestMapping(value = "/book/delete/{isbn}", method = RequestMethod.DELETE)
-    @ResponseBody
-    public ResultEntity delete(@PathVariable String isbn){
-        ResultEntity resultEntity = new ResultEntity();
-        Book book = bookService.getBookByIsbn(isbn);
-        if (book != null){
-            bookService.delete(isbn);
-            resultEntity.setStatus(ResultEntity.Status.SUCCESS);
-            resultEntity.setMessage("ok");
-        } else {
-            resultEntity.setStatus(ResultEntity.Status.ERROR);
-            resultEntity.setMessage("This book is not exist");
-        }
-        return resultEntity;
+    public ResponseEntity<Book> delete(@PathVariable String isbn) {
+        return ResponseEntity.ok(bookService.delete(isbn));
     }
 
     @RequestMapping(value = "/book/add", method = RequestMethod.POST)
-    @ResponseBody
-    public ResultEntity add(@RequestBody Book book){
-        ResultEntity resultEntity = new ResultEntity();
-        if (bookService.getBookByIsbn(book.getIsbn()) != null){
-            resultEntity.setStatus(ResultEntity.Status.ERROR);
-            resultEntity.setMessage("This book is exist");
-        }else {
-            resultEntity.putParams("data", bookService.saveBook(book));
-            resultEntity.setStatus(ResultEntity.Status.SUCCESS);
-            resultEntity.setMessage("ok");
-        }
-        return resultEntity;
+    public ResponseEntity<Book> add(@RequestBody Book book) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(bookService.create(book));
     }
 
-    @RequestMapping(value = "/book/update", method = RequestMethod.POST)
-    @ResponseBody
-    public ResultEntity update(@RequestBody Book book){
-        ResultEntity resultEntity = new ResultEntity();
-        if (bookService.getBookByIsbn(book.getIsbn()) != null){
-            resultEntity.putParams("data", bookService.saveBook(book));
-            resultEntity.setStatus(ResultEntity.Status.SUCCESS);
-            resultEntity.setMessage("ok");
-        } else {
-            resultEntity.setStatus(ResultEntity.Status.ERROR);
-            resultEntity.setMessage("This book is not exist");
-        }
-        return resultEntity;
+    @RequestMapping(value = "/book/update", method = RequestMethod.PUT)
+    public ResponseEntity<Book> update(@RequestBody Book book) {
+        return ResponseEntity.ok(bookService.save(book));
+    }
+
+
+    private MessageSourceAccessor messageSource;
+
+    @Autowired
+    public void setMessageSource(MessageSource messageSource) {
+        this.messageSource = new MessageSourceAccessor(messageSource);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> resourceNotFoundException(ResourceNotFoundException exception, Locale locale) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", new Date());
+        body.put("status", exception.getStatus());
+        body.put("error", exception.getError());
+        body.put("message", messageSource.getMessage(exception.getCode(), exception.getArgs(), locale).orElse("No message available"));
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
     }
 }
