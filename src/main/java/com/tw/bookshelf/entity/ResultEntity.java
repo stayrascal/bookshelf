@@ -6,7 +6,7 @@ import java.util.Map;
 public class ResultEntity {
     private Integer status;
     private String message;
-    private Map<String, Object> params = new HashMap<>();
+    private Map<String, Object> params = new HashMap<String,Object>();
 
     public ResultEntity putParams(String key, Object value){
         this.params.put(key, value);

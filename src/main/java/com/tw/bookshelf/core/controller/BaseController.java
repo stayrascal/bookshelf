@@ -37,7 +37,7 @@ public class BaseController {
     }
 
     private Map<String, Object> getBodyMap(ResourceException exception, Locale locale) {
-        Map<String, Object> body = new LinkedHashMap<>();
+        Map<String, Object> body = new LinkedHashMap<String, Object>();
         body.put("timestamp", new Date());
         body.put("status", exception.getStatus());
         body.put("error", exception.getError());

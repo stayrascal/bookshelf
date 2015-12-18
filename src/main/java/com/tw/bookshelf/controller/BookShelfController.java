@@ -18,7 +18,7 @@ public class BookShelfController extends BaseController {
     private BookService bookService;
 
     @RequestMapping(value = "/book/get", method = RequestMethod.GET)
-    public ResponseEntity<Iterable> getAllBooks() {
+    public ResponseEntity<Iterable<Book>> getAllBooks() {
         return ResponseEntity.ok(bookService.findAll());
     }
 
