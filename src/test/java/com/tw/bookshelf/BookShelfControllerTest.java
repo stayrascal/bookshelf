@@ -72,6 +72,15 @@ public class BookShelfControllerTest {
                 .andExpect(jsonPath("$[2s].price", is(second.getPrice())))*/;
     }
 
+    @Test
+    public void theReturnStatusShouldBe200WhenDeleteBookSuccessfulAndTheMethodIsDelete() throws Exception {
+
+        mockMvc.perform(delete("/book/delete/{isbn}", "9780201485677"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(jsonPath("$.status", is(200)))
+                .andExpect(jsonPath("$.message", is("ok")));
+    }
 
     @Test
     public void shouldReturnDetailOfBookWhichIsbnIs9780201485677() throws Exception {
@@ -101,15 +110,7 @@ public class BookShelfControllerTest {
     }
 
 
-    @Test
-    public void theReturnStatusShouldBe200WhenDeleteBookSuccessfulAndTheMethodIsDelete() throws Exception {
 
-        mockMvc.perform(delete("/book/delete/{isbn}", "9780201485677"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$.status", is(200)))
-                .andExpect(jsonPath("$.message", is("ok")));
-    }
 
     @Test
     public void theReturnStatusShouldBe200WhenDeleteBookSuccessfulAndTheMethodIsGet() throws Exception {
