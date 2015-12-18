@@ -18,16 +18,16 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book getBookByIsbn(String isbn) {
-        return repository.findBookByIsbn(isbn);
+        return repository.findOne(isbn);
     }
 
     @Override
     public Book saveBook(Book book) {
-        return repository.saveBook(book);
+        return repository.save(book);
     }
 
     @Override
     public void delete(String isbn) {
-        repository.remove(isbn);
+        repository.delete(isbn);
     }
 }
