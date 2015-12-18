@@ -1,5 +1,6 @@
 package com.tw.bookshelf.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -7,7 +8,9 @@ import javax.persistence.Id;
 public class Book {
 
     @Id
+    @Column(length = 32)
     private String isbn;
+    @Column(length = 32)
     private String name;
     private String author;
     private Double price;

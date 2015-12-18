@@ -24,8 +24,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book getBookByIsbn(String isbn) {
-        Book book = repository.findBookByIsbn(isbn);
-        if (Objects.isNull(book)){
+        Book book = repository.findOne(isbn);
+        if (Objects.isNull(book)) {
             throw new BookNotFoundException(isbn);
         }
         return book;
@@ -33,24 +33,24 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book create(Book book) {
-        if (Objects.nonNull(repository.findBookByIsbn(book.getIsbn()))){
+        if (Objects.nonNull(repository.findOne(book.getIsbn()))) {
             throw new BookIsExistException(book.getIsbn());
         }
-        return repository.saveBook(book);
+        return repository.save(book);
     }
 
     @Override
     public Book save(Book book) {
-        if (Objects.isNull(getBookByIsbn(book.getIsbn()))){
+        if (Objects.isNull(getBookByIsbn(book.getIsbn()))) {
             throw new BookNotFoundException(book.getIsbn());
         }
-        return repository.saveBook(book);
+        return repository.save(book);
     }
 
     @Override
     public Book delete(String isbn) {
         Book book = getBookByIsbn(isbn);
-        repository.remove(book);
+        repository.delete(book);
         return book;
     }
 }

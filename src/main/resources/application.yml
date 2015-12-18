@@ -1,28 +1,40 @@
 #Server settings (ServerProperties)
-server:
-  port: 8080
-  address: 127.0.0.1
-  session:
-    timeout: 30
-  context-path: /
+#server:
+#  port: 8080
+#  address: 127.0.0.1
+#  session:
+#    timeout: 30
+#  context-path: /
 
   #Tomcat specifics
-  tomcat:
-    accesslog:
-      enabled: false
-    protocol-header: x-forwarded-proto
-    remote-ip-header: x-forwarded-for
-    background-processor-delay: 30 #secs
-    basedir:
+#  tomcat:
+#    accesslog:
+#      enabled: false
+#    protocol-header: x-forwarded-proto
+#    remote-ip-header: x-forwarded-for
+#    background-processor-delay: 30 #secs
+#    basedir:
+
+service:
+  info:
+    name: Restful Web Service Example
+    version: 1.0.0
+
+logging:
+  level:
+    org.springframework.boot:INFO
+    org.springframework.web:DEBUG
+    org.springframework.data:INFO
 
 
-#spring:
-#  jpa:
-#    hibernate:
-#      ddl-auto: create-drop
-#    show-sql: true
-#  datasource:
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+  datasource:
 #    driver-class-name: org.h2.Driver
-#    url: jdbc:h2:./h2/h2db
+#    url: jdbc:h2:mem:test
 #    username: root
 #   password: rascal
