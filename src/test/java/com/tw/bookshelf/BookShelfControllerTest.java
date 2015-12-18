@@ -141,17 +141,26 @@ public class BookShelfControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$", hasSize(4)));
+    }
 
-        /*mockMvc.perform(post("/book/add").contentType("application/json;charset=UTF-8").content(new Gson().toJson(book)))
-                .andExpect(status().isOk())
+    @Test
+    public void theReturnStatusShouldBe403WhenAddAExistBook() throws Exception {
+        Book book = new BookBuilder()
+                .isbn("9780201485677")
+                .name("Refactoring")
+                .author("Martin Fowler")
+                .price(64.99).build();
+
+        mockMvc.perform(post("/book/add").contentType("application/json;charset=UTF-8").content(new Gson().toJson(book)))
+                .andExpect(status().is(403))
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$.status", is(500)))
-                .andExpect(jsonPath("$.message", is("This book is exist")));
+                .andExpect(jsonPath("$.status", is("FORBIDDEN")))
+                .andExpect(jsonPath("$.error", is("Book Forbidden")));
 
         mockMvc.perform(get("/book/get"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$", hasSize(4)));*/
+                .andExpect(jsonPath("$", hasSize(3)));
     }
 
     @Test

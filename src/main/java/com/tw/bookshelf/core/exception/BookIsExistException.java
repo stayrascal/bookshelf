@@ -1,13 +1,12 @@
 package com.tw.bookshelf.core.exception;
 
-
 import org.springframework.http.HttpStatus;
 
-public class BookNotFoundException extends ResourceNotFoundException {
+public class BookIsExistException extends ResourceIsExistException {
 
     private final String isbn;
 
-    public BookNotFoundException(final String isbn) {
+    public BookIsExistException(final String isbn) {
         this.isbn = isbn;
     }
 
@@ -17,11 +16,11 @@ public class BookNotFoundException extends ResourceNotFoundException {
 
     @Override
     public String getError() {
-        return String.format("Book %s", HttpStatus.NOT_FOUND.getReasonPhrase());
+        return String.format("Book %s", HttpStatus.FORBIDDEN.getReasonPhrase());
     }
 
     @Override
     public Object[] getArgs() {
-        return new Object[]{isbn};
+        return new Object[0];
     }
 }

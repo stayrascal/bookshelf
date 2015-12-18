@@ -1,5 +1,6 @@
 package com.tw.bookshelf.service.impl;
 
+import com.tw.bookshelf.core.exception.BookIsExistException;
 import com.tw.bookshelf.core.exception.BookNotFoundException;
 import com.tw.bookshelf.entity.Book;
 import com.tw.bookshelf.repository.BookRepository;
@@ -32,6 +33,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book create(Book book) {
+        if (Objects.nonNull(repository.findBookByIsbn(book.getIsbn()))){
+            throw new BookIsExistException(book.getIsbn());
+        }
         return repository.saveBook(book);
     }
 

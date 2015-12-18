@@ -1,6 +1,8 @@
 package com.tw.bookshelf.core.controller;
 
 import com.tw.bookshelf.core.exception.ResourceException;
+import com.tw.bookshelf.core.exception.ResourceIsExistException;
+import com.tw.bookshelf.core.exception.ResourceNotFoundException;
 import com.tw.bookshelf.core.util.MessageSourceAccessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -24,14 +26,22 @@ public class BaseController {
         this.messageSource = new MessageSourceAccessor(messageSource);
     }
 
-    @ExceptionHandler(ResourceException.class)
-    public ResponseEntity<Map<String, Object>> resourceException(ResourceException exception, Locale locale) {
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> resourceNotFoundException(ResourceNotFoundException exception, Locale locale) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(getBodyMap(exception, locale));
+    }
+
+    @ExceptionHandler(ResourceIsExistException.class)
+    public ResponseEntity<Map<String, Object>> resourceIsExistException(ResourceIsExistException exception, Locale locale) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(getBodyMap(exception, locale));
+    }
+
+    private Map<String, Object> getBodyMap(ResourceException exception, Locale locale) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", new Date());
         body.put("status", exception.getStatus());
         body.put("error", exception.getError());
         body.put("message", messageSource.getMessage(exception.getCode(), exception.getArgs(), locale).orElse("No message available"));
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
+        return body;
     }
 }
