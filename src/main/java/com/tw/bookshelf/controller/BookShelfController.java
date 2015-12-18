@@ -1,24 +1,17 @@
 package com.tw.bookshelf.controller;
 
-import com.tw.bookshelf.core.exception.ResourceNotFoundException;
-import com.tw.bookshelf.core.util.MessageSourceAccessor;
+import com.tw.bookshelf.core.controller.BaseController;
 import com.tw.bookshelf.entity.Book;
 import com.tw.bookshelf.service.BookService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Locale;
-import java.util.Map;
-
 @RestController
-public class BookShelfController {
+public class BookShelfController extends BaseController {
 
     private final Logger logger = LoggerFactory.getLogger(BookShelfController.class);
     @Autowired
@@ -49,22 +42,4 @@ public class BookShelfController {
         return ResponseEntity.ok(bookService.save(book));
     }
 
-
-    private MessageSourceAccessor messageSource;
-
-    @Autowired
-    public void setMessageSource(MessageSource messageSource) {
-        this.messageSource = new MessageSourceAccessor(messageSource);
-    }
-
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<Map<String, Object>> resourceNotFoundException(ResourceNotFoundException exception, Locale locale) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", new Date());
-        body.put("status", exception.getStatus());
-        body.put("error", exception.getError());
-        body.put("message", messageSource.getMessage(exception.getCode(), exception.getArgs(), locale).orElse("No message available"));
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
-    }
 }
