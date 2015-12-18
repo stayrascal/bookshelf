@@ -1,7 +1,12 @@
 package com.tw.bookshelf.entity;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
 public class Book {
 
+    @Id
     private String isbn;
     private String name;
     private String author;

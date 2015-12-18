@@ -16,9 +16,13 @@ server:
     basedir:
 
 
-#spring:
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
 #  datasource:
-#    driver-class-name: com.mysql.jdbc.Driver
-#    url: jdbc:mysql://localhost:3306/proddb
+#    driver-class-name: org.h2.Driver
+#    url: jdbc:h2:./h2/h2db
 #    username: root
 #   password: rascal
