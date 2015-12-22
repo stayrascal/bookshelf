@@ -13,16 +13,16 @@ public class Book {
     @Column(length = 32)
     private String isbn;
     @Column(length = 32)
-    private String name;
+    private String title;
     private String author;
     private Double price;
 
     public Book() {
     }
 
-    public Book(String isbn, String name, String author, Double price) {
+    public Book(String isbn, String title, String author, Double price) {
         this.isbn = isbn;
-        this.name = name;
+        this.title = title;
         this.author = author;
         this.price = price;
     }
@@ -35,12 +35,12 @@ public class Book {
         this.isbn = isbn;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getAuthor() {

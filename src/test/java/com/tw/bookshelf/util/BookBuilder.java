@@ -16,7 +16,7 @@ public class BookBuilder {
     }
 
     public BookBuilder name(String name){
-        book.setName(name);
+        book.setTitle(name);
         return this;
     }
 

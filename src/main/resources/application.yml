@@ -17,7 +17,7 @@
 
 service:
   info:
-    name: Restful Web Service Example
+    title: Restful Web Service Example
     version: 1.0.0
 
 logging:
@@ -35,8 +35,8 @@ spring:
       ddl-auto: validate
     show-sql: true
   datasource:
-    #driver-class-name: org.h2.Driver
-    driver-class-name: com.mysql.jdbc.Driver
+    #driver-class-title: org.h2.Driver
+    driver-class-title: com.mysql.jdbc.Driver
     #url: jdbc:h2:mem:test
     url: jdbc:mysql://localhost:3306/tw
     username: root
@@ -50,9 +50,9 @@ flyway:
   enabled: true
   baseline-on-migrate: true
   table: schema_version
-  schemas: tw
-  locations: classpath:db/migration
+  schemas[0]: tw
+  locations[0]: classpath:db/migration
   out-of-order: true
   encoding: UTF-8
   #baseline-version: 1
-  sql-migration-prefix: v
+  sql-migration-prefix: V
