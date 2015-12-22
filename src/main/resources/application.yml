@@ -31,10 +31,28 @@ logging:
 spring:
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      #ddl-auto: create-drop
+      ddl-auto: validate
     show-sql: true
   datasource:
-#    driver-class-name: org.h2.Driver
-#    url: jdbc:h2:mem:test
-#    username: root
-#   password: rascal
+    #driver-class-name: org.h2.Driver
+    driver-class-name: com.mysql.jdbc.Driver
+    #url: jdbc:h2:mem:test
+    url: jdbc:mysql://localhost:3306/tw
+    username: root
+    password: rascal
+
+#Flyway configuration
+flyway:
+  url: jdbc:mysql://localhost:3306/tw
+  user: root
+  password: rascal
+  enabled: true
+  baseline-on-migrate: true
+  table: schema_version
+  schemas: tw
+  locations: classpath:db/migration
+  out-of-order: true
+  encoding: UTF-8
+  #baseline-version: 1
+  sql-migration-prefix: v

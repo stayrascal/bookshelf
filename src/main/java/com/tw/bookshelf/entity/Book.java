@@ -3,8 +3,10 @@ package com.tw.bookshelf.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "book")
 public class Book {
 
     @Id
