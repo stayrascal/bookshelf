@@ -14,4 +14,10 @@ public interface BookService {
     Book save(Book book);
 
     Book delete(String isbn);
+
+    Iterable<Book> findByCategoryName(String name);
+
+    Iterable<Book> finByTitle(String title);
+
+    Iterable<Book> findBooksByFuzzyTitle(String title);
 }

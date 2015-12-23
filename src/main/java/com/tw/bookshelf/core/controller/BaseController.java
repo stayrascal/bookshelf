@@ -33,7 +33,7 @@ public class BaseController {
 
     @ExceptionHandler(ResourceIsExistException.class)
     public ResponseEntity<Map<String, Object>> resourceIsExistException(ResourceIsExistException exception, Locale locale) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(getBodyMap(exception, locale));
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(getBodyMap(exception, locale));
     }
 
     private Map<String, Object> getBodyMap(ResourceException exception, Locale locale) {

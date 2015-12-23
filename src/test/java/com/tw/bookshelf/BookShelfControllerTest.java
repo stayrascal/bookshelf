@@ -2,9 +2,9 @@ package com.tw.bookshelf;
 
 import com.google.gson.Gson;
 import com.tw.bookshelf.entity.Book;
+import com.tw.bookshelf.repository.BookRepository;
 import com.tw.bookshelf.util.BookBuilder;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,12 +34,14 @@ public class BookShelfControllerTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
+    @Autowired
+    private BookRepository bookRepository;
+
     @Before
     public void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
-    @Ignore
     @Test
     public void ShouldReturnBookListWhenTestGetAllBooksMethod() throws Exception {
         Book first = new BookBuilder()
@@ -58,6 +60,7 @@ public class BookShelfControllerTest {
                 .author("Eric S. Raymond")
                 .price(39.99).build();
         List<Book> books = Arrays.asList(first, second, third);
+        bookRepository.save(books);
         mockMvc.perform(get("/book/get"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
@@ -84,18 +87,24 @@ public class BookShelfControllerTest {
                 .name("Refactoring")
                 .author("Martin Fowler")
                 .price(64.99).build();
+
+        bookRepository.save(expectBook);
+
         mockMvc.perform(get("/book/get/{isbn}", expectBook.getIsbn()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.isbn", is(expectBook.getIsbn())))
                 .andExpect(jsonPath("$.author", is(expectBook.getAuthor())))
                 .andExpect(jsonPath("$.price", is(expectBook.getPrice())))
-                .andExpect(jsonPath("$.name", is(expectBook.getTitle())));
+                .andExpect(jsonPath("$.title", is(expectBook.getTitle())));
     }
 
     @Test
     public void theReturnStatusShouldBe404WhenBookIsNotExist() throws Exception {
-        mockMvc.perform(get("/book/get/3423532"))
+
+        String notExistIsbn = "3423532";
+
+        mockMvc.perform(get("/book/get/{isbn}", notExistIsbn))
         .andExpect(status().is(404))
         .andExpect(jsonPath("$.status", is("NOT_FOUND")))
         .andExpect(jsonPath("$.error", is("Book Not Found")));
@@ -104,6 +113,13 @@ public class BookShelfControllerTest {
 
     @Test
     public void theReturnStatusShouldBe200WhenDeleteBookSuccessfulAndTheMethodIsDelete() throws Exception {
+
+        Book book = new BookBuilder()
+                .isbn("97802014853243677")
+                .name("Refactoring")
+                .author("Martin Fowler")
+                .price(64.99).build();
+        bookRepository.save(book);
 
         mockMvc.perform(delete("/book/delete/{isbn}", "9780201485677"))
                 .andExpect(status().isOk())
@@ -150,16 +166,16 @@ public class BookShelfControllerTest {
     @Test
     public void theReturnStatusShouldBe403WhenAddAExistBook() throws Exception {
         Book book = new BookBuilder()
-                .isbn("9780201485677")
+                .isbn("978020148565643477")
                 .name("Refactoring")
                 .author("Martin Fowler")
                 .price(64.99).build();
-
+        bookRepository.save(book);
         mockMvc.perform(post("/book/add").contentType("application/json;charset=UTF-8").content(new Gson().toJson(book)))
-                .andExpect(status().is(403))
+                .andExpect(status().isConflict())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$.status", is("FORBIDDEN")))
-                .andExpect(jsonPath("$.error", is("Book Forbidden")));
+                .andExpect(jsonPath("$.status", is("CONFLICT")))
+                .andExpect(jsonPath("$.error", is("Book Conflict")));
 
         /*mockMvc.perform(get("/book/get"))
                 .andExpect(status().isOk())
@@ -184,10 +200,12 @@ public class BookShelfControllerTest {
     @Test
     public void theReturnStatusShouldBe200WhenUpdateExistBookAndTheMethodIsPut() throws Exception {
         Book book = new BookBuilder()
-                .isbn("9780132350884")
+                .isbn("97801323508852344")
                 .name("Clean Code")
                 .author("Robert C. Martin")
                 .price(35.44).build();
+
+        bookRepository.save(book);
 
         book.setPrice(55.5);
 
@@ -199,10 +217,12 @@ public class BookShelfControllerTest {
     @Test
     public void theReturnStatusShouldBe405WhenUpdateExistBookAndTheMethodIsPost() throws Exception {
         Book book = new BookBuilder()
-                .isbn("9780132350884")
+                .isbn("978013235085324584")
                 .name("Clean Code")
                 .author("Robert C. Martin")
                 .price(35.44).build();
+
+        bookRepository.save(book);
 
         book.setPrice(55.5);
 

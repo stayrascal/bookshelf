@@ -42,4 +42,14 @@ public class BookShelfController extends BaseController {
         return ResponseEntity.ok(bookService.save(book));
     }
 
+    @RequestMapping(value = "/book/title/{title}", method = RequestMethod.GET)
+    public ResponseEntity<Iterable<Book>> getBooksByFuzzyName(@PathVariable String title) {
+        return ResponseEntity.ok().body(bookService.findBooksByFuzzyTitle(title));
+    }
+
+    @RequestMapping(value = "/book/category/{name}", method = RequestMethod.GET)
+    public ResponseEntity<Iterable<Book>> getBooksByCategoryCode(@PathVariable String name) {
+        return ResponseEntity.ok().body(bookService.findByCategoryName(name));
+    }
+
 }

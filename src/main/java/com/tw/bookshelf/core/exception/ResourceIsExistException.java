@@ -7,11 +7,11 @@ public abstract class ResourceIsExistException extends ResourceException{
 
     @Override
     public HttpStatus getStatus() {
-        return HttpStatus.FORBIDDEN;
+        return HttpStatus.CONFLICT;
     }
 
     @Override
     public String getError() {
-        return HttpStatus.FORBIDDEN.getReasonPhrase();
+        return HttpStatus.CONFLICT.getReasonPhrase();
     }
 }

@@ -16,7 +16,7 @@ public class BookIsExistException extends ResourceIsExistException {
 
     @Override
     public String getError() {
-        return String.format("Book %s", HttpStatus.FORBIDDEN.getReasonPhrase());
+        return String.format("Book %s", HttpStatus.CONFLICT.getReasonPhrase());
     }
 
     @Override

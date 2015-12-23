@@ -7,6 +7,11 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BookRepository extends CrudRepository<Book, String> {
+    Iterable<Book> findByTitle(String title);
+
+    Iterable<Book> findByCategoryCode(String code);
+
+    Iterable<Book> findByTitleContains(String title);
 
     /*private static final Map<String, Book> BOOKS_MAP = new HashMap<String, Book>() {
         {

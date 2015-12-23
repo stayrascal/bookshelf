@@ -1,0 +1,2 @@
+ALTER TABLE book
+ADD UNIQUE KEY UK_TITLE_QUTHOR(title, author);
