@@ -2,11 +2,11 @@ package com.tw.bookshelf.repository;
 
 
 import com.tw.bookshelf.entity.Book;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BookRepository extends CrudRepository<Book, String> {
+public interface BookRepository extends JpaRepository<Book, String> {
     Iterable<Book> findByTitle(String title);
 
     Iterable<Book> findByCategoryCode(String code);

@@ -2,6 +2,7 @@ package com.tw.bookshelf.service;
 
 
 import com.tw.bookshelf.entity.Book;
+import org.springframework.data.domain.Pageable;
 
 public interface BookService {
 
@@ -20,4 +21,10 @@ public interface BookService {
     Iterable<Book> finByTitle(String title);
 
     Iterable<Book> findBooksByFuzzyTitle(String title);
+
+    Iterable<Book> findBooksOrderByPrice();
+
+    Iterable<Book> findBooks(Pageable pageable);
+
+    Long getBookSize();
 }

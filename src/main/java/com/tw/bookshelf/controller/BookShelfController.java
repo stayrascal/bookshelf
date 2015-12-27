@@ -6,6 +6,8 @@ import com.tw.bookshelf.service.BookService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -50,6 +52,28 @@ public class BookShelfController extends BaseController {
     @RequestMapping(value = "/book/category/{name}", method = RequestMethod.GET)
     public ResponseEntity<Iterable<Book>> getBooksByCategoryCode(@PathVariable String name) {
         return ResponseEntity.ok().body(bookService.findByCategoryName(name));
+    }
+
+    @RequestMapping(value = "/book/order/price", method = RequestMethod.GET)
+    public ResponseEntity<Iterable<Book>> getBooksOrderByPriceDesc(){
+        return ResponseEntity.ok().body(bookService.findBooksOrderByPrice());
+    }
+
+    @RequestMapping(value = "/book/get/{start}/{rows}", method = RequestMethod.GET)
+    public ResponseEntity<Iterable<Book>> getBooks(@PathVariable int start, @PathVariable int rows){
+        Pageable pageable = new PageRequest(start, rows);
+        return ResponseEntity.ok().body(bookService.findBooks(pageable));
+    }
+
+    @RequestMapping(value = "/book/page", method = RequestMethod.GET)
+    public ResponseEntity<Iterable<Book>> getBooks(@RequestBody PageRequest pageable){
+        logger.debug("\n\n\n--------getBooks--------\n\n\n");
+        return ResponseEntity.ok().body(bookService.findBooks(pageable));
+    }
+
+    @RequestMapping(value = "/book/count", method = RequestMethod.GET)
+    public ResponseEntity<Long> getBooksSize(){
+        return  ResponseEntity.ok().body(bookService.getBookSize());
     }
 
 }

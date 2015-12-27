@@ -9,6 +9,9 @@ import com.tw.bookshelf.repository.BookRepository;
 import com.tw.bookshelf.repository.CategoryRepository;
 import com.tw.bookshelf.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -77,4 +80,21 @@ public class BookServiceImpl implements BookService {
     public Iterable<Book> findBooksByFuzzyTitle(String title) {
         return repository.findByTitleContains(title);
     }
+
+    @Override
+    public Iterable<Book> findBooksOrderByPrice() {
+        Sort sort = new Sort(Direction.DESC, "price");
+        return repository.findAll(sort);
+    }
+
+    @Override
+    public Iterable<Book> findBooks(Pageable pageable) {
+        return repository.findAll(pageable).getContent();
+    }
+
+    @Override
+    public Long getBookSize() {
+        return repository.count();
+    }
+
 }

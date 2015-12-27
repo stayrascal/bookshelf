@@ -1,0 +1,137 @@
+/* ========= head ========= */
+.g-head {
+    height: 100px;
+    padding-top: 5px;
+}
+
+.g-head .head-main, .main-wrap {
+    width: 950px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.g-head .head-main .head-action {
+    color: #666;
+    position: absolute;
+    right: 0;
+    top: 10px;
+}
+
+.g-head .head-main .head-action a {
+    margin: 0 10px;
+    display: inline-block;
+    font-size: 14px;
+}
+
+.g-head .head-logo {
+    height: 60px;
+    background: #317EE7 url('./ac/logo.png') center no-repeat;
+    background-size: 130px;
+    width: 170px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.g-head .head-logo h1 {
+    display: block;
+    width: 150px;
+    margin: 0 auto;
+    padding-top: 4px;
+}
+
+.g-head .head-logo h1 a {
+    display: block;
+    height: 50px;
+    width: 150px;
+    line-height: 300px;
+    overflow: hidden;
+}
+
+/* ========= nav ========== */
+.g-head .head-nav {
+    background-color: #317EE7;
+    height: 40px;
+    min-width: 950px;
+}
+
+.g-head .head-nav li {
+    padding-top: 2px;
+    margin-right: 3px;
+    float: left;
+}
+
+.g-head .head-nav li a {
+    padding: 0 15px;
+    height: 36px;
+    line-height: 36px;
+    font-size: 14px;
+    color: #fff;
+    display: block;
+    -webkit-transition: all .2s ease-in;
+    -moz-transition: all .2s ease-in;
+    -o-transition: all .2s ease-in;
+    -ms-transition: all .2s ease-in;
+    transition: all .2s ease-in;
+}
+
+.g-head .head-nav li a:hover,
+.g-head .head-nav .cur a {
+    text-decoration: none;
+    background-color: #5196f4;
+}
+
+.g-head .head-nav li a + ul {
+    position: absolute;
+    z-index: 10;
+    visibility: hidden;
+}
+
+.g-head .head-nav li a + ul > li {
+    float: none;
+    width: 150px;
+    margin: 0;
+    height: 36px;
+    padding-top: 0;
+    border-bottom: 1px solid #317EE7;
+}
+
+.g-head .head-nav li a + ul > li a,
+.g-head .head-nav li.cur ul > li a {
+    background-color: rgba(81, 150, 244, 0.9);
+}
+
+.g-head .head-nav li a + ul > li a:hover {
+    background-color: rgba(49, 126, 231, 0.9);
+}
+
+.g-head .head-nav {
+    clear: both;
+    z-index: 2;
+    zoom: 1;
+}
+
+.g-head .head-nav:after {
+    display: block;
+    content: "";
+    clear: both;
+    height: 0;
+    overflow: hidden;
+}
+
+.g-ad {
+    width: 950px;
+    margin: 10px auto;
+}
+
+.g-ad img {
+    width: 944px;
+    height: 74px;
+    border: 3px solid #317EE7;
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2/1), only screen and (min-device-pixel-ratio: 2) {
+    .g-head .head-logo {
+        background-image: url('./ac/logo@2x.png');
+    }
+
+}

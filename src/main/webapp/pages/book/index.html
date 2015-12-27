@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <title>New Book</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" href="./index.css">
+  <link href="../../components/header/index.html" rel="import" id="Header">
+  <link href="../../components/form/index.html" rel="import" id="Form">
+  <link href="../../components/footer/index.html" rel="import" id="Footer">
+  <script src="../../utils/httpRequest.js"></script>
+  <script src="../../utils/getQueryParam.js"></script>
+  <script src="../../config/constants.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+  var Header = document.querySelector('#Header');
+  document.body.appendChild(Header.import.querySelector('.g-head'));
+</script>
+
+<script type="text/javascript">
+  var Form = document.querySelector('#Form');
+  document.body.appendChild(Form.import.querySelector('.form'));
+</script>
+
+<script type="text/javascript">
+  var Footer = document.querySelector('#Footer');
+  document.body.appendChild(Footer.import.querySelector('.g-footer'));
+</script>
+
+<script src="./index.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.4.min.js"></script>
+</body>
+</html>

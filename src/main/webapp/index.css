@@ -1,0 +1,122 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+ul, ol {
+    list-style: none;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0
+}
+
+html {
+    font-family: "Helvetica Neue", Helvetica, "Microsoft YaHei", FreeSans, Arimo, "Droid Sans", "wenquanyi micro hei", "Hiragino Sans GB", "Hiragino Sans GB W3", Arial, sans-serif;
+    background-color: #f0f2f5;
+    line-height: 1.6;
+    font-size: 12px;
+}
+
+a {
+    color: #999;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+a:hover {
+    color: #777;
+}
+
+.g-ad {
+    width: 950px;
+    margin: 10px auto;
+}
+
+.g-ad img {
+    width: 944px;
+    height: 74px;
+    border: 3px solid #317EE7;
+}
+
+/* ========= box ========== */
+
+.g-box {
+    position: relative;
+    background-color: #fff;
+    margin-bottom: 10px;
+    border: 1px solid #e3e4e8;
+    border-radius: 5px;
+    box-shadow: 0 1px 2px 0 rgba(158, 158, 158, 0.2);
+}
+
+.g-box .hd {
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    margin: 0 12px;
+    padding-left: 5px;
+    border-bottom: 1px solid #e3e4e8;
+    color: #4a90f1;
+    font-weight: 700;
+}
+
+.g-box .bd {
+    padding: 10px 20px 20px;
+}
+
+.g-box .more {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+}
+
+/*  button */
+
+.button {
+    background-color: #317EE7;
+    padding: 5px 10px;
+    color: #fff;
+    display: inline-block;
+}
+
+.button:hover {
+    color: #fff;
+    opacity: 0.8;
+}
+
+.module-book-list {
+    width: 100%;
+    table-layout: fixed;
+
+}
+
+.module-book-list td,
+.module-book-list th {
+    height: 30px;
+    text-align: left;
+    padding-left: 10px;
+}
+
+.module-book-list th {
+    color: #666;
+    border-bottom: 1px solid #666;
+}
+
+.module-book-list td {
+    height: 40px;
+    border-bottom: 1px solid #ccc;
+}
+
+.module-book-list .col-operates {
+    text-align: center;
+}
+
+.module-book-list td a {
+    margin: 0 5px;
+}
+
+.table__row--no-book {
+    font-size: 14px;
+}

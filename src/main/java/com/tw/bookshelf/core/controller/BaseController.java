@@ -44,4 +44,40 @@ public class BaseController {
         body.put("message", messageSource.getMessage(exception.getCode(), exception.getArgs(), locale).orElse("No message available"));
         return body;
     }
+
+    /*public Map<Integer, TableCoulumEntity> parseColum(HttpServletRequest request){
+        Map<String, Object> columnParams = WebUtils.getParametersStartingWith(request, "columns");
+        Map<Integer, Map<String, String>> groupParams = new HashMap<Integer, Map<String, String>>();
+        Map<Integer, TableCoulumEntity> columEntityMap = new HashMap<Integer, TableCoulumEntity>();
+        Set<Integer> paramsIndexSet = new HashSet<Integer>();
+
+        for (Map.Entry<String, Object> entry : columnParams.entrySet()){
+            Integer paramIndex = getColumnPAramIndex(entry.getKey());
+            if (Objects.isNull(paramIndex)){
+                continue;
+            }
+            paramsIndexSet.add(paramIndex);
+        }
+
+        for (Integer paramsIndex : paramsIndexSet){
+            Map<String, String> groupMap = new HashMap<String, String>();
+            for (Map.Entry<String, Object> entry : columnParams.entrySet()){
+                Integer paramIndex = getColumnParamIndex(entry.getKey());
+                if (Objects.isNull(paramIndex)){
+                    continue;
+                }
+                if (paramsIndex.equals(paramIndex)){
+                    groupMap.put(entry.getKey(), String.valueOf(entry.getValue()));
+                }
+            }
+            groupParams.put(paramsIndex, groupMap);
+        }
+
+        for (Map.Entry<Integer, Map<String, String>> entry : groupParams.entrySet()){
+            Map<String, String> paramMap = entry.getValue();
+            TableCoulumEntity tableCoulumEntity = new TableCoulumEntity();
+            tableCoulumEntity.setName(paramMap.get());
+        }
+
+    }*/
 }
