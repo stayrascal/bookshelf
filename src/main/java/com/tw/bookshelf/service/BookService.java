@@ -4,6 +4,8 @@ package com.tw.bookshelf.service;
 import com.tw.bookshelf.entity.Book;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface BookService {
 
     Iterable<Book> findAll();
@@ -24,7 +26,7 @@ public interface BookService {
 
     Iterable<Book> findBooksOrderByPrice();
 
-    Iterable<Book> findBooks(Pageable pageable);
+    List<Book> findBooks(Pageable pageable);
 
     Long getBookSize();
 }

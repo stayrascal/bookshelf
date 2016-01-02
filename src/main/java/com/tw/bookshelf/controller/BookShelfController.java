@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class BookShelfController extends BaseController {
 
@@ -66,7 +68,7 @@ public class BookShelfController extends BaseController {
     }
 
     @RequestMapping(value = "/book/page", method = RequestMethod.GET)
-    public ResponseEntity<Iterable<Book>> getBooks(@RequestBody PageRequest pageable){
+    public ResponseEntity<List<Book>> getBooks(@RequestBody PageRequest pageable){
         logger.debug("\n\n\n--------getBooks--------\n\n\n");
         return ResponseEntity.ok().body(bookService.findBooks(pageable));
     }

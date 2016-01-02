@@ -175,6 +175,7 @@ public class BookShelfControllerIntegrationTest {
                 .andExpect(jsonPath("$").value(12));
     }
 
+
     @Ignore
     @Test
     public void should_return_books_by_page_and_sort() throws Exception {

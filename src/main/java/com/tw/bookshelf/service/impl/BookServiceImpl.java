@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -88,7 +89,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Iterable<Book> findBooks(Pageable pageable) {
+    public List<Book> findBooks(Pageable pageable) {
         return repository.findAll(pageable).getContent();
     }
 
