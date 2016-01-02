@@ -74,6 +74,9 @@ public class BookShelfControllerIntegrationTest {
     public void should_be_able_to_add_book_to_shelf() throws Exception {
         bookRepository.deleteAll();
         Book book = new Book("1234567890", "Hello World", "sqlin", 54.2);
+        Category category = new Category("C123456", "Category Name", "Category Description");
+        categoryRepository.save(category);
+        book.setCategory(category);
         String bookJson = new Gson().toJson(book);
 
         mockMvc.perform(post("/book/add").contentType(MediaType.APPLICATION_JSON_UTF8).content(bookJson))
@@ -186,10 +189,11 @@ public class BookShelfControllerIntegrationTest {
         Sort sort = new Sort(Sort.Direction.DESC, "price");
         PageRequest pageable = new PageRequest(0, 10, sort);
         System.out.println(new Gson().toJson(pageable));
-        mockMvc.perform(get("/book/page").contentType(MediaType.APPLICATION_JSON_UTF8).content(new Gson().toJson(pageable)))
+        mockMvc.perform(post("/book/page")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(new Gson().toJson(pageable)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(10)))
                 .andExpect(jsonPath("$.[9].price").value(12.0));
-
     }
 }

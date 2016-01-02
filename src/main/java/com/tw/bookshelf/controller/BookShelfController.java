@@ -67,10 +67,16 @@ public class BookShelfController extends BaseController {
         return ResponseEntity.ok().body(bookService.findBooks(pageable));
     }
 
-    @RequestMapping(value = "/book/page", method = RequestMethod.GET)
+    @RequestMapping(value = "/book/page", method = RequestMethod.POST)
     public ResponseEntity<List<Book>> getBooks(@RequestBody PageRequest pageable){
         logger.debug("\n\n\n--------getBooks--------\n\n\n");
         return ResponseEntity.ok().body(bookService.findBooks(pageable));
+    }
+
+    @RequestMapping(value = "/book/page1", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<List<Book>> getBookByPage(PageRequest pageRequest) {
+        return ResponseEntity.ok().body(bookService.findBooks(pageRequest));
     }
 
     @RequestMapping(value = "/book/count", method = RequestMethod.GET)
