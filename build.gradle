@@ -2,7 +2,7 @@ group 'com.tw.web'
 version '1.0-SNAPSHOT'
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.9'
+    gradleVersion = '2.10'
 }
 
 defaultTasks 'clean', 'build'
@@ -68,3 +68,4 @@ task "create-dirs" << {
     sourceSets*.java.srcDirs*.each { it.mkdirs() }
     sourceSets*.resources.srcDirs*.each { it.mkdirs() }
 }
+
