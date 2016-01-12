@@ -35,24 +35,25 @@ spring:
       ddl-auto: validate
     show-sql: true
   datasource:
-    #driver-class-title: org.h2.Driver
-    driver-class-title: com.mysql.jdbc.Driver
-    #url: jdbc:h2:mem:test
-    url: jdbc:mysql://localhost:3306/tw
-    username: root
-    password: rascal
+    driver-class-title: org.h2.Driver
+    #driver-class-title: com.mysql.jdbc.Driver
+    url: jdbc:h2:mem:test
+    #url: jdbc:mysql://localhost:3306/tw
+    #username: root
+    #password: rascal
 
 #Flyway configuration
-flyway:
-  url: jdbc:mysql://localhost:3306/tw
-  user: root
-  password: rascal
-  enabled: true
-  baseline-on-migrate: true
-  table: schema_version
-  schemas[0]: tw
-  locations[0]: classpath:db/migration
-  out-of-order: true
-  encoding: UTF-8
-  #baseline-version: 1
-  sql-migration-prefix: V
+#flyway:
+#  url: jdbc:mysql://localhost:3306/tw
+#  #url: jdbc:h2:mem:test
+#  user: root
+#  password: rascal
+#  enabled: true
+#  baseline-on-migrate: true
+#  table: schema_version
+#  schemas[0]: tw
+#  locations[0]: classpath:db/migration
+#  out-of-order: true
+#  encoding: UTF-8
+#  #baseline-version: 1
+#  sql-migration-prefix: V
