@@ -26,7 +26,7 @@ springBoot {
     mainClass = "com.tw.bookshelf.SpringBootWebApplication"
 }
 
-jar {
+war {
     baseName = 'bookshelf-service'
     version = '0.1.0'
 }
