@@ -40,13 +40,13 @@ spring:
     #url: jdbc:h2:mem:test
     url: jdbc:mysql://localhost:3306/tw
     username: root
-    password: rascal
+    password: root
 
 #Flyway configuration
 flyway:
   url: jdbc:mysql://localhost:3306/tw
   user: root
-  password: rascal
+  password: root
   enabled: true
   baseline-on-migrate: true
   table: schema_version
