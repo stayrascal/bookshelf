@@ -3,7 +3,7 @@ group 'com.tw.web'
 version '1.0-SNAPSHOT'
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.9'
+    gradleVersion = '2.11'
 }
 
 defaultTasks 'clean', 'build'
@@ -31,6 +31,8 @@ jar{
     version = '0.1.0'
 }
 
+
+
 repositories{
     mavenCentral()
 }
@@ -45,7 +47,7 @@ dependencies{
     compile 'com.google.code.gson:gson'
     compile 'org.webjars:bootstrap:3.3.4'
     compile 'org.webjars:jquery:2.1.4'
-    testCompile 'junit:junit'
+    testCompile 'junit:junit:4.12'
 }
 
 task "create-dirs" << {
